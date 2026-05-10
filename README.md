@@ -1,1 +1,1 @@
-
+A full-stack language agnostic chatbot for students learning in English, Kannada, and Hindi. The app provides authenticated AI chat, user-specific chat history, document upload, OCR for scans and handwritten notes, and document-based question answering with Ollama.
