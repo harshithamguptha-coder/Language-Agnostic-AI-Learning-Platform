@@ -7,7 +7,9 @@ from dotenv import load_dotenv
 from backend.database import initialize_database
 from backend.routes import auth as auth_router
 from backend.routes import chat as chat_router
+from backend.routes import quiz as quiz_router
 from backend.routes import upload as upload_router
+from backend.routes import voice as voice_router
 
 load_dotenv()
 
@@ -34,7 +36,9 @@ app.add_middleware(
 
 app.include_router(auth_router.router)
 app.include_router(chat_router.router)
+app.include_router(quiz_router.router)
 app.include_router(upload_router.router)
+app.include_router(voice_router.router)
 
 
 @app.on_event("startup")

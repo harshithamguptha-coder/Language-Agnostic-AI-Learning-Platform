@@ -1,4 +1,6 @@
-const ChatBubble = ({ message, sender, theme = 'dark' }) => {
+import AudioControls from './AudioControls'
+
+const ChatBubble = ({ message, sender, theme = 'dark', audioControls }) => {
   const isUser = sender === 'user'
   const isDark = theme === 'dark'
 
@@ -15,8 +17,29 @@ const ChatBubble = ({ message, sender, theme = 'dark' }) => {
           isUser ? 'text-blue-100' : isDark ? 'text-slate-400' : 'text-slate-500'
         }`}>
           {isUser ? 'You' : 'EduAssist'}
+          {!isUser && audioControls && (audioControls.status === 'playing' || audioControls.status === 'loading') && (
+            <span className="ml-2 inline-flex items-center gap-2 text-[10px]">
+              <span className={`inline-block h-2 w-2 rounded-full ${audioControls.status === 'playing' ? 'bg-green-400' : 'bg-blue-400'} animate-pulse`} />
+              <span className="text-[10px] text-slate-400">{audioControls.status === 'loading' ? 'Speaking...' : 'Listening/Playing'}</span>
+            </span>
+          )}
         </div>
         <p className="whitespace-pre-line">{message}</p>
+        {!isUser && audioControls && (
+          <AudioControls
+            isDark={isDark}
+            status={audioControls.status}
+            error={audioControls.error}
+            progress={audioControls.progress}
+            currentTime={audioControls.currentTime}
+            duration={audioControls.duration}
+            onPlay={audioControls.onPlay}
+            onPause={audioControls.onPause}
+            onResume={audioControls.onResume}
+            onStop={audioControls.onStop}
+            onReplay={audioControls.onReplay}
+          />
+        )}
       </div>
     </div>
   )

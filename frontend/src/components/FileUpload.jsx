@@ -1,4 +1,11 @@
-const FileUpload = ({ onFileChange, selectedFile, theme = 'dark' }) => {
+const FileUpload = ({
+  onFileChange,
+  selectedFile,
+  theme = 'dark',
+  title = 'Upload Document, Scan, or Notes',
+  hint = 'PDF, DOCX, PPTX, TXT, PNG, JPG, WEBP, TIFF',
+  accept = '.pdf,.docx,.pptx,.txt,.png,.jpg,.jpeg,.bmp,.webp,.tif,.tiff',
+}) => {
   const isDark = theme === 'dark'
 
   return (
@@ -11,14 +18,14 @@ const FileUpload = ({ onFileChange, selectedFile, theme = 'dark' }) => {
     >
       <div>
         <div className={`mb-2 text-sm font-medium ${isDark ? 'text-white' : 'text-slate-950'}`}>
-          {selectedFile ? selectedFile.name : 'Upload Document, Scan, or Notes'}
+          {selectedFile ? selectedFile.name : title}
         </div>
         <div className={`text-xs ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>
-          PDF, DOCX, PPTX, TXT, PNG, JPG, WEBP, TIFF
+          {hint}
         </div>
         <input
           type="file"
-          accept=".pdf,.docx,.pptx,.txt,.png,.jpg,.jpeg,.bmp,.webp,.tif,.tiff"
+          accept={accept}
           className="hidden"
           onChange={(event) => onFileChange(event.target.files?.[0] ?? null)}
         />

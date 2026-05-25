@@ -11,6 +11,37 @@ FLUSH PRIVILEGES;
 USE chatbot_db;
 
 ALTER TABLE users
+  ADD COLUMN IF NOT EXISTS password_hash VARCHAR(255) NULL;
+
+UPDATE users
+SET password_hash = password
+WHERE password_hash IS NULL
+  AND password IS NOT NULL
+  AND password != ''
+  AND (
+    password LIKE '$2a$%'
+    OR password LIKE '$2b$%'
+    OR password LIKE '$2y$%'
+  );
+
+ALTER TABLE users
+  ADD COLUMN IF NOT EXISTS username VARCHAR(120) NULL;
+
+UPDATE users
+SET username = CONCAT(
+  COALESCE(NULLIF(SUBSTRING_INDEX(email, '@', 1), ''), 'user'),
+  '_',
+  id
+)
+WHERE username IS NULL OR username = '';
+
+ALTER TABLE users
+  MODIFY COLUMN username VARCHAR(120) NOT NULL;
+
+CREATE UNIQUE INDEX IF NOT EXISTS ix_users_username
+  ON users (username);
+
+ALTER TABLE users
   ADD COLUMN IF NOT EXISTS created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP;
 
 ALTER TABLE chat_history

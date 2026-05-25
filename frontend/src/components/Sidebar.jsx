@@ -7,13 +7,12 @@ const Sidebar = ({
   onNewChat,
   onSelectChat,
   onDeleteChat,
-  onOpenOcr,
-  isOcrOpen = false,
+  activeModule = 'chat',
+  onSelectModule,
   theme = 'dark',
 }) => {
   const { logout } = useAuth()
   const [contextMenu, setContextMenu] = useState(null)
-  const [comingSoonFeature, setComingSoonFeature] = useState('')
   const isDark = theme === 'dark'
 
   const surfaceClass = isDark
@@ -25,10 +24,11 @@ const Sidebar = ({
     ? 'text-slate-400 hover:bg-slate-900 hover:text-white'
     : 'text-slate-600 hover:bg-slate-100 hover:text-slate-950'
   const dividerClass = isDark ? 'border-slate-800' : 'border-slate-200'
-  const featureButtons = [
-    'Voice-Based Learning Assistant',
-    'AI Quiz Generator',
-    'Study Notes Summarizer',
+  const moduleButtons = [
+    { id: 'voice', label: 'Voice-Based Learning Assistant' },
+    { id: 'quiz', label: 'AI Quiz Generator' },
+    { id: 'upload', label: 'Upload Documents' },
+    { id: 'summarizer', label: 'Study Notes Summarizer' },
   ]
 
   useEffect(() => {
@@ -72,30 +72,19 @@ const Sidebar = ({
           >
             New Chat
           </button>
-          <button
-            onClick={onOpenOcr}
-            className={`mb-3 w-full rounded-xl px-4 py-3 text-sm font-semibold transition ${
-              isOcrOpen ? activeClass : idleClass
-            }`}
-          >
-            Upload Documents
-          </button>
           <div className="mb-6 space-y-2">
-            {featureButtons.map((feature) => (
+            {moduleButtons.map((module) => (
               <button
-                key={feature}
+                key={module.id}
                 type="button"
-                onClick={() => setComingSoonFeature(feature)}
-                className={`w-full rounded-xl px-4 py-3 text-left text-sm font-semibold transition ${idleClass}`}
+                onClick={() => onSelectModule?.(module.id)}
+                className={`w-full rounded-xl px-4 py-3 text-left text-sm font-semibold transition ${
+                  activeModule === module.id ? activeClass : idleClass
+                }`}
               >
-                {feature}
+                {module.label}
               </button>
             ))}
-            {comingSoonFeature && (
-              <div className={`rounded-xl border px-3 py-3 text-sm ${dividerClass} ${mutedTextClass}`}>
-                {comingSoonFeature} coming soon.
-              </div>
-            )}
           </div>
           <div className={`mb-3 text-xs font-semibold uppercase tracking-[0.18em] ${mutedTextClass}`}>
             Recent chats
